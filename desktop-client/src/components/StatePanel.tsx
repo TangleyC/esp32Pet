@@ -2,12 +2,16 @@ import { Activity } from "lucide-react";
 import type { PetState } from "../services/api";
 
 const states: Array<{ value: PetState; label: string; preview: string }> = [
-  { value: "idle", label: "idle", preview: "(•‿•) 待机中" },
-  { value: "sleep", label: "sleep", preview: "(-_-) Zzz" },
-  { value: "coding", label: "coding", preview: "(⌐■_■) 正在写代码..." },
-  { value: "error", label: "error", preview: "(⊙﹏⊙) 程序出错啦" },
-  { value: "success", label: "success", preview: "(≧▽≦) 任务完成" },
-  { value: "happy", label: "happy", preview: "(^o^) 今天真开心" },
+  { value: "online", label: "online", preview: "在线" },
+  { value: "thinking", label: "thinking", preview: "思考中" },
+  { value: "working", label: "working", preview: "工作中" },
+  { value: "message", label: "message", preview: "收到消息" },
+  { value: "fishing", label: "fishing", preview: "摸鱼中" },
+  { value: "sleep", label: "sleep", preview: "休眠中" },
+  { value: "happy", label: "happy", preview: "开心" },
+  { value: "cool", label: "cool", preview: "酷" },
+  { value: "confused", label: "confused", preview: "疑惑" },
+  { value: "offline", label: "offline", preview: "离线" },
 ];
 
 type StatePanelProps = {

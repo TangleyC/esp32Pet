@@ -197,6 +197,36 @@ textarea:focus {
   font-size: 13px;
 }
 
+.monitor-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 12px;
+  align-items: center;
+}
+
+.monitor-row div {
+  display: grid;
+  min-width: 0;
+  gap: 5px;
+}
+
+.monitor-row strong,
+.monitor-row span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.monitor-row strong {
+  color: #223027;
+  font-size: 15px;
+}
+
+.monitor-row span {
+  color: #5b675f;
+  font-size: 13px;
+}
+
 .state-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -239,6 +269,7 @@ textarea:focus {
   }
 
   .button-row,
+  .monitor-row,
   .state-grid {
     grid-template-columns: 1fr;
   }

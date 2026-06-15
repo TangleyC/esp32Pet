@@ -31,24 +31,28 @@ deskpet/
 
 ## Desktop Client
 
+Browser preview:
+
 ```powershell
 cd desktop-client
 npm install
 npm run dev
 ```
 
-Run as a Tauri desktop app:
+Tauri desktop app:
 
 ```powershell
 npm run tauri dev
 ```
 
+Use `npm run tauri dev` when you want active-window sprite switching. The plain browser preview cannot read the Windows foreground window.
+
 ## ESP32 Firmware
 
 1. Open `esp32-firmware` with PlatformIO.
-2. Copy `include/deskpet_config.example.h` to `include/deskpet_config.h`.
-3. Set your WiFi SSID and password.
-4. Upload to the ESP32-2432S028 board.
+2. Upload firmware to the ESP32-2432S028 board.
+3. If the board has no saved WiFi or cannot connect within 15 seconds, it starts AP setup mode.
+4. Connect to `DeskPet-Setup`, open `http://192.168.4.1`, then save `ssid`, `password`, and `deviceName`.
 
 The firmware exposes:
 

@@ -1,4 +1,26 @@
-export type PetState = "idle" | "sleep" | "coding" | "error" | "success" | "happy";
+export const PET_STATES = [
+  "online",
+  "thinking",
+  "idea",
+  "happy",
+  "cool",
+  "sleep",
+  "working",
+  "busy",
+  "fishing",
+  "message",
+  "like",
+  "sad",
+  "angry",
+  "confused",
+  "offline",
+  "idle",
+  "coding",
+  "error",
+  "success",
+] as const;
+
+export type PetState = (typeof PET_STATES)[number];
 
 export type PingResponse = {
   ok: boolean;

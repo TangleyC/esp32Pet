@@ -1,3 +1,3 @@
 fn main() {
-  deskpet_lib::run()
+    deskpet_lib::run()
 }

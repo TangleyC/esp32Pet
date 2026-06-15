@@ -1,33 +1,49 @@
 # Window State Monitor
 
-This helper watches the active Windows foreground window and sends DeskPet state updates to the ESP32.
+DeskPet has two ways to sync the ESP32 sprite with the active Windows foreground window.
 
-## Run
+## Recommended: Tauri Client
+
+Run the real desktop client:
 
 ```powershell
-powershell -ExecutionPolicy Bypass -File .\scripts\window-state-monitor.ps1 -DeviceIp 192.168.1.120
+cd F:\test\esp32Pet\desktop-client
+npm run tauri dev
 ```
 
-Stop it with `Ctrl+C`.
-
-## How It Works
-
-The script reads the current foreground process and window title, matches it against `scripts/window-state-map.json`, then calls:
+Keep the "活动窗口联动" panel enabled. The client will read the current Windows foreground app and call:
 
 ```http
 POST /state
 ```
 
-Example mappings:
+Important:
 
-- Code editors and terminals -> `working`
-- Browser on Codex/GitHub/Jenkins pages -> `thinking`
-- General browser windows -> `fishing`
-- WeChat/enterprise chat apps -> `message`
+- `npm run dev` only starts the browser preview. It cannot read the Windows active window.
+- `npm run tauri dev` starts the desktop app. This is required for active-window sync.
+- The Device IP field must match the ESP32 IP, for example `192.168.1.120`.
 
-## Optional Window Title Mode
+Built-in mappings:
 
-You can also send the active window title as text:
+- Code, Codex, Cursor, WebStorm, terminals -> `working`
+- Browser pages for Codex, GitHub, Jenkins, PlatformIO, Tauri, React, ESP32 -> `thinking`
+- General browser pages -> `fishing`
+- WeChat, WXWork, QQ, Telegram, DingTalk -> `message`
+- Clash Verge -> `cool`
+- No match -> `online`
+
+## Fallback: PowerShell Script
+
+The old script is still useful for quick testing or when the Tauri client is not running.
+
+```powershell
+cd F:\test\esp32Pet
+powershell -ExecutionPolicy Bypass -File .\scripts\window-state-monitor.ps1 -DeviceIp 192.168.1.120
+```
+
+Stop it with `Ctrl+C`.
+
+Optional title mode:
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\window-state-monitor.ps1 -DeviceIp 192.168.1.120 -SendWindowTitle
@@ -35,13 +51,11 @@ powershell -ExecutionPolicy Bypass -File .\scripts\window-state-monitor.ps1 -Dev
 
 This is noisier because every title change triggers `/text`.
 
-## Sprite Integration
+## Sprite States
 
-The monitor already uses state names that match the planned sprite sheet:
+The monitor uses state names that match the sprite assets:
 
 ```text
 online, thinking, idea, happy, cool, sleep, working, busy, fishing,
 message, like, sad, angry, confused, offline
 ```
-
-After the image sheet is split into individual sprites, the firmware can map these same states to images without changing the monitor script.
