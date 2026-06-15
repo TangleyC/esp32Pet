@@ -1,0 +1,9 @@
+desktop-client/node_modules/
+desktop-client/dist/
+desktop-client/src-tauri/target/
+desktop-client-vite*.log
+esp32-firmware/.pio/
+
+*.bin
+*.elf
+*.map
