@@ -5,10 +5,10 @@
 #include <WebServer.h>
 #include <WiFi.h>
 
-#if __has_include("config.h")
-#include "config.h"
+#if __has_include("deskpet_config.h")
+#include "deskpet_config.h"
 #else
-#include "config.example.h"
+#include "deskpet_config.example.h"
 #endif
 
 namespace {

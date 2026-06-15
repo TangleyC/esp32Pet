@@ -36,7 +36,7 @@ npm run tauri dev
 ## ESP32 Firmware
 
 1. Open `esp32-firmware` with PlatformIO.
-2. Copy `include/config.example.h` to `include/config.h`.
+2. Copy `include/deskpet_config.example.h` to `include/deskpet_config.h`.
 3. Set your WiFi SSID and password.
 4. Upload to the ESP32-2432S028 board.
 
