@@ -1,0 +1,34 @@
+{
+  "defaultState": "online",
+  "rules": [
+    {
+      "process": ["Code", "Codex", "Cursor", "WebStorm", "idea64", "pycharm64", "devenv"],
+      "state": "working"
+    },
+    {
+      "process": ["WindowsTerminal", "wt", "powershell", "pwsh", "cmd"],
+      "state": "working"
+    },
+    {
+      "process": ["chrome", "msedge", "firefox"],
+      "titleContains": ["Codex", "GitHub", "Jenkins", "PlatformIO", "Tauri", "React", "ESP32"],
+      "state": "thinking"
+    },
+    {
+      "process": ["chrome", "msedge", "firefox"],
+      "state": "fishing"
+    },
+    {
+      "process": ["WeChat", "Weixin", "WeChatAppEx", "WXWork", "WXWorkWeb", "WeMail", "QQ", "Telegram", "DingTalk"],
+      "state": "message"
+    },
+    {
+      "titleContains": ["微信", "企业微信", "WeChat", "WXWork"],
+      "state": "message"
+    },
+    {
+      "process": ["Clash Verge", "Clash Verge Service"],
+      "state": "cool"
+    }
+  ]
+}

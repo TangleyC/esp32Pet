@@ -1,0 +1,253 @@
+{
+  "source": "assets/source/pet-sprite-sheet.png",
+  "sourceSize": {
+    "width": 1536,
+    "height": 1024
+  },
+  "spriteSize": {
+    "width": 128,
+    "height": 128
+  },
+  "sprites": [
+    {
+      "name": "online",
+      "label": "在线",
+      "grid": {
+        "row": 0,
+        "column": 0
+      },
+      "sourceCrop": {
+        "x": 61,
+        "y": 48,
+        "width": 198,
+        "height": 218
+      },
+      "raw": "assets/sprites/raw/online.png",
+      "sprite128": "assets/sprites/128/online.png"
+    },
+    {
+      "name": "thinking",
+      "label": "思考中",
+      "grid": {
+        "row": 0,
+        "column": 1
+      },
+      "sourceCrop": {
+        "x": 338,
+        "y": 32,
+        "width": 276,
+        "height": 234
+      },
+      "raw": "assets/sprites/raw/thinking.png",
+      "sprite128": "assets/sprites/128/thinking.png"
+    },
+    {
+      "name": "idea",
+      "label": "有想法了",
+      "grid": {
+        "row": 0,
+        "column": 2
+      },
+      "sourceCrop": {
+        "x": 664,
+        "y": 0,
+        "width": 258,
+        "height": 266
+      },
+      "raw": "assets/sprites/raw/idea.png",
+      "sprite128": "assets/sprites/128/idea.png"
+    },
+    {
+      "name": "happy",
+      "label": "开心",
+      "grid": {
+        "row": 0,
+        "column": 3
+      },
+      "sourceCrop": {
+        "x": 944,
+        "y": 49,
+        "width": 263,
+        "height": 217
+      },
+      "raw": "assets/sprites/raw/happy.png",
+      "sprite128": "assets/sprites/128/happy.png"
+    },
+    {
+      "name": "cool",
+      "label": "酷",
+      "grid": {
+        "row": 0,
+        "column": 4
+      },
+      "sourceCrop": {
+        "x": 1269,
+        "y": 50,
+        "width": 198,
+        "height": 216
+      },
+      "raw": "assets/sprites/raw/cool.png",
+      "sprite128": "assets/sprites/128/cool.png"
+    },
+    {
+      "name": "sleep",
+      "label": "休眠中",
+      "grid": {
+        "row": 1,
+        "column": 0
+      },
+      "sourceCrop": {
+        "x": 59,
+        "y": 361,
+        "width": 239,
+        "height": 247
+      },
+      "raw": "assets/sprites/raw/sleep.png",
+      "sprite128": "assets/sprites/128/sleep.png"
+    },
+    {
+      "name": "working",
+      "label": "工作中",
+      "grid": {
+        "row": 1,
+        "column": 1
+      },
+      "sourceCrop": {
+        "x": 366,
+        "y": 382,
+        "width": 191,
+        "height": 226
+      },
+      "raw": "assets/sprites/raw/working.png",
+      "sprite128": "assets/sprites/128/working.png"
+    },
+    {
+      "name": "busy",
+      "label": "忙碌中",
+      "grid": {
+        "row": 1,
+        "column": 2
+      },
+      "sourceCrop": {
+        "x": 662,
+        "y": 386,
+        "width": 199,
+        "height": 222
+      },
+      "raw": "assets/sprites/raw/busy.png",
+      "sprite128": "assets/sprites/128/busy.png"
+    },
+    {
+      "name": "fishing",
+      "label": "摸鱼中",
+      "grid": {
+        "row": 1,
+        "column": 3
+      },
+      "sourceCrop": {
+        "x": 959,
+        "y": 383,
+        "width": 220,
+        "height": 225
+      },
+      "raw": "assets/sprites/raw/fishing.png",
+      "sprite128": "assets/sprites/128/fishing.png"
+    },
+    {
+      "name": "message",
+      "label": "收到消息",
+      "grid": {
+        "row": 1,
+        "column": 4
+      },
+      "sourceCrop": {
+        "x": 1263,
+        "y": 381,
+        "width": 221,
+        "height": 227
+      },
+      "raw": "assets/sprites/raw/message.png",
+      "sprite128": "assets/sprites/128/message.png"
+    },
+    {
+      "name": "like",
+      "label": "喜欢",
+      "grid": {
+        "row": 2,
+        "column": 0
+      },
+      "sourceCrop": {
+        "x": 62,
+        "y": 694,
+        "width": 221,
+        "height": 255
+      },
+      "raw": "assets/sprites/raw/like.png",
+      "sprite128": "assets/sprites/128/like.png"
+    },
+    {
+      "name": "sad",
+      "label": "难过",
+      "grid": {
+        "row": 2,
+        "column": 1
+      },
+      "sourceCrop": {
+        "x": 357,
+        "y": 710,
+        "width": 196,
+        "height": 239
+      },
+      "raw": "assets/sprites/raw/sad.png",
+      "sprite128": "assets/sprites/128/sad.png"
+    },
+    {
+      "name": "angry",
+      "label": "生气",
+      "grid": {
+        "row": 2,
+        "column": 2
+      },
+      "sourceCrop": {
+        "x": 620,
+        "y": 699,
+        "width": 283,
+        "height": 250
+      },
+      "raw": "assets/sprites/raw/angry.png",
+      "sprite128": "assets/sprites/128/angry.png"
+    },
+    {
+      "name": "confused",
+      "label": "疑惑",
+      "grid": {
+        "row": 2,
+        "column": 3
+      },
+      "sourceCrop": {
+        "x": 975,
+        "y": 692,
+        "width": 221,
+        "height": 257
+      },
+      "raw": "assets/sprites/raw/confused.png",
+      "sprite128": "assets/sprites/128/confused.png"
+    },
+    {
+      "name": "offline",
+      "label": "离线",
+      "grid": {
+        "row": 2,
+        "column": 4
+      },
+      "sourceCrop": {
+        "x": 1273,
+        "y": 711,
+        "width": 194,
+        "height": 238
+      },
+      "raw": "assets/sprites/raw/offline.png",
+      "sprite128": "assets/sprites/128/offline.png"
+    }
+  ]
+}
