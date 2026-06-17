@@ -3,8 +3,10 @@ desktop-client/dist/
 desktop-client/src-tauri/gen/
 desktop-client/src-tauri/target/
 desktop-client-vite*.log
+window-state-monitor*.log
 esp32-firmware/.pio/
 esp32-firmware/include/deskpet_config.h
+.idea/
 
 *.bin
 *.elf

@@ -19,6 +19,15 @@ deskpet/
     └── platformio.ini
 ```
 
+## Progress
+
+- [Handoff / next steps](docs/HANDOFF.md)
+- [Setup on a new computer or network](docs/SETUP-NEW-MACHINE.md)
+- [WiFi setup mode](docs/WIFI-SETUP.md)
+- [2026-06 project progress](docs/PROGRESS-2026-06.md)
+- [Window state monitor](docs/WINDOW-STATE-MONITOR.md)
+- [Sprite assets](docs/SPRITES.md)
+
 ## Desktop Client
 
 ```powershell

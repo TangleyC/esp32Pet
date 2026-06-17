@@ -19,6 +19,7 @@ const normalizeBaseUrl = (ip: string) => {
     return value.replace(/\/+$/, "");
   }
 
+  // 用户只需要填 IP；这里统一补齐协议，减少 UI 表单负担。
   return `http://${value.replace(/\/+$/, "")}`;
 };
 
@@ -36,6 +37,7 @@ const requestJson = async <T>(ip: string, path: string, init?: RequestInit): Pro
     throw new Error(`设备响应异常：HTTP ${response.status}`);
   }
 
+  // ESP32 端所有 MVP 接口都约定返回 JSON，调用侧用泛型保持类型清晰。
   return response.json() as Promise<T>;
 };
 

@@ -10,6 +10,7 @@ type ConnectionState = "idle" | "connected" | "error";
 const AUTO_RECONNECT_MS = 15000;
 
 export default function App() {
+  // 设备信息只在首次渲染时从 localStorage 读取，避免每次状态更新都重复解析。
   const savedDevice = useMemo(loadDevice, []);
   const [deviceIp, setDeviceIp] = useState(savedDevice.ip);
   const [deviceName, setDeviceName] = useState(savedDevice.name);
@@ -19,6 +20,7 @@ export default function App() {
   const [busy, setBusy] = useState(false);
   const [statusText, setStatusText] = useState("等待连接设备");
 
+  // silent=true 用于自动重连轮询：更新连接状态，但不打断用户当前的操作提示。
   const runPing = async (silent = false) => {
     if (!deviceIp.trim()) {
       setConnection("error");
@@ -47,6 +49,7 @@ export default function App() {
     }
   };
 
+  // MVP 阶段用轻量轮询做自动重连，后续 WebSocket 接入后可以替换为心跳/在线事件。
   useEffect(() => {
     const timer = window.setInterval(() => {
       if (deviceIp.trim()) {
@@ -66,6 +69,7 @@ export default function App() {
     setBusy(true);
     setStatusText("正在发送文字...");
     try {
+      // 文本接口会让 ESP32 立即切到文本展示画面。
       await sendText(deviceIp, message.trim());
       setConnection("connected");
       setStatusText("文字已发送到 DeskPet");
@@ -81,6 +85,7 @@ export default function App() {
     setBusy(true);
     setStatusText(`正在切换到 ${petState}...`);
     try {
+      // 状态接口只发送状态 key，具体表情和文案由固件端统一映射。
       await applyState(deviceIp, petState);
       setConnection("connected");
       setStatusText(`状态已切换：${petState}`);
