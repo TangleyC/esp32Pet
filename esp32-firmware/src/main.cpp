@@ -3,6 +3,7 @@
 #include <LittleFS.h>
 #include <PNGdec.h>
 #include <Preferences.h>
+#include <SD.h>
 #include <SPI.h>
 #include <TFT_eSPI.h>
 #include <U8g2_for_TFT_eSPI.h>
@@ -24,16 +25,24 @@ WebServer server(80);
 Preferences preferences;
 PNG png;
 File pngFile;
+SPIClass sdSpi(VSPI);
 
 constexpr const char* DEFAULT_DEVICE_NAME = "DeskPet ESP32";
 constexpr const char* SETUP_AP_SSID = "DeskPet-Setup";
 constexpr uint32_t WIFI_CONNECT_TIMEOUT_MS = 15000;
+constexpr int SD_CS_PIN = 5;
+constexpr int SD_MOSI_PIN = 23;
+constexpr int SD_MISO_PIN = 19;
+constexpr int SD_SCLK_PIN = 18;
+constexpr uint32_t SD_SPI_FREQUENCY = 20000000;
 
 String currentState = "idle";
 String currentFace = "(^_^)";
 String currentText = "Idle";
 String deviceName = DEFAULT_DEVICE_NAME;
 bool setupMode = false;
+bool littleFsAvailable = false;
+bool sdAvailable = false;
 uint16_t spriteLineBuffer[320];
 int spriteDrawX = 0;
 int spriteDrawY = 0;
@@ -69,13 +78,123 @@ const PetExpression expressions[] = {
 };
 
 void* pngOpen(const char* filename, int32_t* size) {
-  pngFile = LittleFS.open(filename, "r");
+  if (sdAvailable && SD.exists(filename)) {
+    pngFile = SD.open(filename, FILE_READ);
+  } else if (littleFsAvailable && LittleFS.exists(filename)) {
+    pngFile = LittleFS.open(filename, "r");
+  }
+
   if (!pngFile) {
     return nullptr;
   }
 
   *size = pngFile.size();
   return &pngFile;
+}
+
+bool copyFileToSd(const char* path) {
+  if (!littleFsAvailable || !sdAvailable || !LittleFS.exists(path)) {
+    return false;
+  }
+
+  File source = LittleFS.open(path, "r");
+  if (!source) {
+    Serial.print("LittleFS open failed: ");
+    Serial.println(path);
+    return false;
+  }
+
+  File target = SD.open(path, FILE_WRITE);
+  if (!target) {
+    Serial.print("SD write failed: ");
+    Serial.println(path);
+    source.close();
+    return false;
+  }
+
+  uint8_t buffer[512];
+  while (source.available()) {
+    size_t bytesRead = source.read(buffer, sizeof(buffer));
+    if (target.write(buffer, bytesRead) != bytesRead) {
+      Serial.print("SD write incomplete: ");
+      Serial.println(path);
+      source.close();
+      target.close();
+      return false;
+    }
+  }
+
+  source.close();
+  target.close();
+  Serial.print("Copied sprite to SD: ");
+  Serial.println(path);
+  return true;
+}
+
+void syncSpritesToSd() {
+  if (!littleFsAvailable || !sdAvailable) {
+    return;
+  }
+
+  if (!SD.exists("/sprites")) {
+    SD.mkdir("/sprites");
+  }
+
+  File root = LittleFS.open("/sprites");
+  if (!root || !root.isDirectory()) {
+    Serial.println("LittleFS /sprites directory missing");
+    return;
+  }
+
+  uint16_t copied = 0;
+  uint16_t skipped = 0;
+  File entry = root.openNextFile();
+  while (entry) {
+    if (!entry.isDirectory()) {
+      String path = String("/sprites/") + entry.name();
+      if (SD.exists(path)) {
+        skipped++;
+      } else if (copyFileToSd(path.c_str())) {
+        copied++;
+      }
+    }
+
+    entry.close();
+    entry = root.openNextFile();
+  }
+
+  root.close();
+  Serial.printf("Sprite sync complete: copied=%u skipped=%u\n", copied, skipped);
+}
+
+void initStorage() {
+  littleFsAvailable = LittleFS.begin();
+  if (!littleFsAvailable) {
+    Serial.println("LittleFS mount failed; flash sprites will not be shown");
+  } else {
+    Serial.println("LittleFS mounted");
+  }
+
+  sdSpi.begin(SD_SCLK_PIN, SD_MISO_PIN, SD_MOSI_PIN, SD_CS_PIN);
+  sdAvailable = SD.begin(SD_CS_PIN, sdSpi, SD_SPI_FREQUENCY);
+  if (!sdAvailable) {
+    Serial.println("SD mount failed; using LittleFS sprites only");
+    return;
+  }
+
+  uint8_t cardType = SD.cardType();
+  if (cardType == CARD_NONE) {
+    sdAvailable = false;
+    Serial.println("No SD card detected; using LittleFS sprites only");
+    return;
+  }
+
+  uint64_t cardSizeMb = SD.cardSize() / (1024ULL * 1024ULL);
+  uint64_t usedMb = SD.usedBytes() / (1024ULL * 1024ULL);
+  uint64_t totalMb = SD.totalBytes() / (1024ULL * 1024ULL);
+  Serial.printf("SD mounted: card=%lluMB fs=%lluMB used=%lluMB\n", cardSizeMb, totalMb, usedMb);
+
+  syncSpritesToSd();
 }
 
 void pngClose(void* handle) {
@@ -241,7 +360,9 @@ void drawUtf8WrappedText(const String& text, int x, int y, int maxWidth, int lin
 
 bool drawSprite(const String& state, int y) {
   String path = "/sprites/" + state + ".png";
-  if (!LittleFS.exists(path)) {
+  bool existsOnSd = sdAvailable && SD.exists(path);
+  bool existsOnFlash = littleFsAvailable && LittleFS.exists(path);
+  if (!existsOnSd && !existsOnFlash) {
     Serial.print("Sprite missing: ");
     Serial.println(path);
     return false;
@@ -395,6 +516,24 @@ void handleStatus() {
   response["face"] = currentFace;
   response["text"] = currentText;
   response["ip"] = setupMode ? WiFi.softAPIP().toString() : WiFi.localIP().toString();
+  response["storage"]["sd"] = sdAvailable;
+  response["storage"]["littlefs"] = littleFsAvailable;
+  sendJson(200, response);
+}
+
+void handleStorage() {
+  JsonDocument response;
+  response["ok"] = true;
+  response["littlefs"]["mounted"] = littleFsAvailable;
+  response["sd"]["mounted"] = sdAvailable;
+
+  if (sdAvailable) {
+    response["sd"]["cardSizeMb"] = SD.cardSize() / (1024ULL * 1024ULL);
+    response["sd"]["totalMb"] = SD.totalBytes() / (1024ULL * 1024ULL);
+    response["sd"]["usedMb"] = SD.usedBytes() / (1024ULL * 1024ULL);
+    response["sd"]["spritesDir"] = SD.exists("/sprites");
+  }
+
   sendJson(200, response);
 }
 
@@ -582,6 +721,8 @@ void setupRoutes() {
   server.on("/ping", HTTP_OPTIONS, handleOptions);
   server.on("/status", HTTP_GET, handleStatus);
   server.on("/status", HTTP_OPTIONS, handleOptions);
+  server.on("/storage", HTTP_GET, handleStorage);
+  server.on("/storage", HTTP_OPTIONS, handleOptions);
   server.on("/text", HTTP_POST, handleText);
   server.on("/text", HTTP_OPTIONS, handleOptions);
   server.on("/message", HTTP_POST, handleText);
@@ -608,9 +749,7 @@ void setup() {
   tft.fillScreen(COLOR_BG);
   u8f.begin(tft);
 
-  if (!LittleFS.begin()) {
-    Serial.println("LittleFS mount failed; sprites will not be shown");
-  }
+  initStorage();
 
 #ifdef TFT_BL
   pinMode(TFT_BL, OUTPUT);

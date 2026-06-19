@@ -27,6 +27,7 @@ deskpet/
 - [2026-06 project progress](docs/PROGRESS-2026-06.md)
 - [Window state monitor](docs/WINDOW-STATE-MONITOR.md)
 - [Sprite assets](docs/SPRITES.md)
+- [2026-06-19 SD card migration log](docs/SD-CARD-LOG-2026-06-19.md)
 
 ## Desktop Client
 
